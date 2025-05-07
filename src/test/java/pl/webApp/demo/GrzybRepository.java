@@ -63,7 +63,7 @@ public class GrzybRepository {
 
 
     ///  Obsluga tabeli Kategoria
-    public List<Kategoria> getData_Kategoria() {
+    public List<Kategoria> getData_kategoria() {
         return jdbcTemplate.query("SELECT id, czy_jadalne, niebezpieczenstwo FROM kategoria",
                 BeanPropertyRowMapper.newInstance(Kategoria.class));
     }
@@ -84,7 +84,7 @@ public class GrzybRepository {
 
 
     /// Obsluga tabeli Obrazek
-    public List<Obrazek> getData_Obrazek() {
+    public List<Obrazek> getData_obrazek() {
         return jdbcTemplate.query("SELECT id, url_obrazka, opis FROM obrazek",
                 BeanPropertyRowMapper.newInstance(Obrazek.class));
     }
@@ -105,7 +105,7 @@ public class GrzybRepository {
 
 
     /// obsluga tabeli Przepis
-    public List<Przepis> getData_Przepis() {
+    public List<Przepis> getData_przepis() {
         return jdbcTemplate.query("SELECT id, opis, nazwa FROM przepis",
                 BeanPropertyRowMapper.newInstance(Przepis.class));
     }
