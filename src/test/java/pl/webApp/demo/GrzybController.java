@@ -31,12 +31,36 @@ public class GrzybController {
         return grzybRepository.addGrzyby(grzyby);
     }
 
+    @GetMapping("/przepis")
+    public List<Przepis> getAllPrzepis() {return grzybRepository.getData_przepis();}
+
+    @GetMapping("/przepis/{id}")
+    public Przepis getPrzepis(@PathVariable("id") int id) {return grzybRepository.getPrzepis(id);}
+
+    @PostMapping()
+    public int addPrzepis(@RequestBody List<Przepis> przepisy) {return grzybRepository.addPrzepisy(przepisy);}
+
     /// http://localhost:8080/grzyby/grzyb_przepis
     @GetMapping("/grzyb_przepis")
     public List<Grzyb_przepis> getAllGrzyb_przepis() {return grzybRepository.getData_grzybPrzepis();}
 
+    @GetMapping("/grzyb_przepis/{id}")
+    public Grzyb_przepis getGrzyb_przepisPoGrzyb(@PathVariable("id") int id) {return grzybRepository.getGrzybPrzepisPoGrzyb(id);}
 
+    @GetMapping("/przepis/grzyb_przepis/{id}")
+    public Grzyb_przepis getGrzyb_przepisPoPrzepis(@PathVariable("id") int id) {return grzybRepository.getGrzybPrzepisPoPrzepis(id);}
 
+    @PostMapping()
+    public int addGrzyb_przepis(@RequestBody List<Grzyb_przepis> grzybPrzepis) {return grzybRepository.addGrzybPrzepis(grzybPrzepis);}
+
+    @GetMapping("/kategoria")
+    public List<Kategoria> getAllKategoria() {return grzybRepository.getData_kategoria();}
+
+    @GetMapping("/kategoria/{id}")
+    public Kategoria getKategoria(@PathVariable("id") int id) {return grzybRepository.getKategoria(id);}
+
+    @PostMapping()
+    public int addKategoria(@RequestBody List<Kategoria> kategorie) {return grzybRepository.addKategorie(kategorie);}
 
 
 }
