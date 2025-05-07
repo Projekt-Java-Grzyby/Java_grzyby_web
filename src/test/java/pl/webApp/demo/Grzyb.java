@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class Grzyb {
     private int id;
     private String nazwa;
-    private String nazwa_powszechna;
     private int id_obrazek;
     private int id_kategoria;
     private String opis;

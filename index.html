@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Mushrooms</title>
+</head>
+<body>
+<h1>Mushrooms</h1>
+<div id="mushroom-list">Loading...</div>
+
+
+<script>
+    fetch('http://localhost:8080/grzyby')
+        .then(response => response.json())
+        .then(async mushrooms => {
+            const listDiv = document.getElementById('mushroom-list');
+            listDiv.innerHTML = '';
+
+            for (const mushroom of mushrooms) {
+                // Get image info
+                const imageResponse = await fetch(`http://localhost:8080/grzyby/obrazek/${mushroom.id_obrazek}`);
+                const image = await imageResponse.json();
+
+                // Create container
+                const container = document.createElement('div');
+                container.style.margin = '20px';
+
+                // Create clickable image
+                const img = document.createElement('img');
+                img.src = image.url_obrazka;
+                img.alt = mushroom.nazwa;
+                img.style.maxWidth = '200px';
+                img.style.cursor = 'pointer';
+
+                img.onclick = () => {
+                    console.log("Image clicked!");
+                    console.log("Mushroom ID:", mushroom.id);  // Log the mushroom ID
+                    const url = `details.html?id=${mushroom.id}`;  // Construct the URL
+                    console.log("Navigating to:", url);  // Log the final URL that will be opened
+                    window.location.href = url;  // Navigate to details.html with the id as a query parameter
+                };
+
+                const title = document.createElement('p');
+                title.textContent = mushroom.nazwa;
+
+                container.appendChild(img);
+                container.appendChild(title);
+                listDiv.appendChild(container);
+            }
+        })
+        .catch(error => {
+            document.getElementById('mushroom-list').textContent = 'Error loading mushrooms: ' + error;
+        });
+</script>
+</body>
+</html>

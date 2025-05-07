@@ -90,7 +90,7 @@ public class GrzybRepository {
     }
 
     public Obrazek getObrazek(int id) {
-        return jdbcTemplate.queryForObject("SELECT id, url_obrazka, opis FROM obrazek WHERE id = ?",
+        return jdbcTemplate.queryForObject("SELECT id, url_obrazka FROM obrazek WHERE id = ?",
                 BeanPropertyRowMapper.newInstance(Obrazek.class), id);
     }
 
