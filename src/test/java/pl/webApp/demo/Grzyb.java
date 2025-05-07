@@ -14,6 +14,5 @@ public class Grzyb {
     private int id_obrazek;
     private int id_kategoria;
     private String opis;
+    private String nazwa_zdjecia;
 }
-
-
