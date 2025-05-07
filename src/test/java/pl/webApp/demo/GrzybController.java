@@ -37,7 +37,7 @@ public class GrzybController {
     @GetMapping("/przepis/{id}")
     public Przepis getPrzepis(@PathVariable("id") int id) {return grzybRepository.getPrzepis(id);}
 
-    @PostMapping()
+    @PostMapping("/przepis")
     public int addPrzepis(@RequestBody List<Przepis> przepisy) {return grzybRepository.addPrzepisy(przepisy);}
 
     /// http://localhost:8080/grzyby/grzyb_przepis
@@ -50,7 +50,7 @@ public class GrzybController {
     @GetMapping("/przepis/grzyb_przepis/{id}")
     public Grzyb_przepis getGrzyb_przepisPoPrzepis(@PathVariable("id") int id) {return grzybRepository.getGrzybPrzepisPoPrzepis(id);}
 
-    @PostMapping()
+    @PostMapping("/grzyb_przepis")
     public int addGrzyb_przepis(@RequestBody List<Grzyb_przepis> grzybPrzepis) {return grzybRepository.addGrzybPrzepis(grzybPrzepis);}
 
     @GetMapping("/kategoria")
@@ -59,7 +59,7 @@ public class GrzybController {
     @GetMapping("/kategoria/{id}")
     public Kategoria getKategoria(@PathVariable("id") int id) {return grzybRepository.getKategoria(id);}
 
-    @PostMapping()
+    @PostMapping("/kategoria")
     public int addKategoria(@RequestBody List<Kategoria> kategorie) {return grzybRepository.addKategorie(kategorie);}
 
 
