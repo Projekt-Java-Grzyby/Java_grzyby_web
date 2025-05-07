@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Mushroom Detail</title>
+</head>
+<body>
+<h1>Mushroom Details</h1>
+<ul id="mushroom-details">Loading...</ul>
+<div id="mushroom-image"></div>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    this.page_id = params['id'];
+    const mushroomId = params.get('id');
+
+    console.log("Mushroom ID:", mushroomId);  // This should log the id, e.g., "1"
+
+    // If mushroomId is not found or is undefined, log an error
+    if (!mushroomId) {
+        alert("Mushroom ID not found!");
+        window.location.href = "index.html";  // Redirect to the homepage if ID is not found
+    }
+    //console.log(mushroomId);
+    fetch(`http://localhost:8080/grzyby/${mushroomId}`)
+    //fetch(`http://localhost:8080/grzyby/1`)
+        .then(response => response.json())
+        .then(mushroom => {
+            const details = document.getElementById('mushroom-details');
+            details.innerHTML = '';
+
+            for (const [key, value] of Object.entries(mushroom)) {
+                const li = document.createElement('li');
+                li.textContent = `${key}: ${value} `;
+                details.appendChild(li);
+            }
+
+            return fetch(`http://localhost:8080/grzyby/obrazek/${mushroom.id_obrazek}`);
+        })
+        .then(response => response.json())
+        .then(obrazek => {
+            const imageDiv = document.getElementById('mushroom-image');
+            const img = document.createElement('img');
+            img.src = obrazek.url_obrazka;
+            img.alt = 'Mushroom Image';
+            img.style.maxWidth = '400px';
+            imageDiv.appendChild(img);
+        })
+        .catch(error => {
+            document.getElementById('mushroom-details').textContent = 'Error: ' + error;
+        });
+</script>
+</body>
+</html>

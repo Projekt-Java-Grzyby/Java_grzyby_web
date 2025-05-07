@@ -7,12 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Grzyb {
-    private int id;
-    private String nazwa;
-    private int id_obrazek;
-    private int id_kategoria;
-    private String opis;
+public class Obrazek {
+        private int id;
+        private String url_obrazka;
+        private String opis;
+
 }
-
-
