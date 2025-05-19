@@ -31,9 +31,6 @@ public class GrzybController {
         return grzybRepository.getData();
     }
 
-
-
-
     /// http://localhost:8080/grzyby/1
     @GetMapping("/{id}")
     public Grzyb getGrzybById(@PathVariable("id") int id) {
@@ -54,6 +51,10 @@ public class GrzybController {
         return grzybRepository.getObrazek(id);
     }
 
+    @GetMapping("/przepisy")
+    public List<Przepis> getAllPrzepisy() {
+        return grzybRepository.getData_przepis();
+    }
     /// http://localhost:8080/grzyby/grzyb_przepis
     @GetMapping("/grzyb_przepis")
     public List<Grzyb_przepis> getAllGrzyb_przepis() {return grzybRepository.getData_grzybPrzepis();}
