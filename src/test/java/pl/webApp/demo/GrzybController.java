@@ -59,10 +59,22 @@ public class GrzybController {
     @GetMapping("/grzyb_przepis")
     public List<Grzyb_przepis> getAllGrzyb_przepis() {return grzybRepository.getData_grzybPrzepis();}
 
+    /// obsługa zdjęć grzybów
     @GetMapping("/zdjecia/{filename}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+    public ResponseEntity<Resource> getGrzybImage(@PathVariable String filename) {
+        return getImageFromFolder(filename, "src/zdjecia/");
+    }
+
+    /// obsługa zdjęć przepisów
+    @GetMapping("/przepisy/zdjecia/{filename}")
+    public ResponseEntity<Resource> getPrzepisImage(@PathVariable String filename) {
+        return getImageFromFolder(filename, "src/zdjecia/");
+    }
+
+    /// wspólna metoda pomocnicza
+    private ResponseEntity<Resource> getImageFromFolder(String filename, String folderPath) {
         try {
-            Path filePath = Paths.get("src/zdjecia/" + filename).normalize();
+            Path filePath = Paths.get(folderPath + filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists()) {
@@ -77,7 +89,4 @@ public class GrzybController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-
-
 }

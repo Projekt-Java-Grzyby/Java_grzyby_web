@@ -106,21 +106,24 @@ public class GrzybRepository {
 
     /// obsluga tabeli Przepis
     public List<Przepis> getData_przepis() {
-        return jdbcTemplate.query("SELECT id, opis, nazwa FROM przepis",
+        return jdbcTemplate.query("SELECT id, opis, nazwa, nazwa_zdjecia, skladniki FROM przepis",
                 BeanPropertyRowMapper.newInstance(Przepis.class));
     }
 
     public Przepis getPrzepis(int id) {
-        return jdbcTemplate.queryForObject("SELECT id, opis, nazwa FROM przepis WHERE id = ?",
+        return jdbcTemplate.queryForObject("SELECT id, opis, nazwa, nazwa_zdjecia, skladniki FROM przepis WHERE id = ?",
                 BeanPropertyRowMapper.newInstance(Przepis.class), id);
     }
 
     public int addPrzepis(List<Przepis> przepisy) {
         przepisy.forEach(nowy_przepis -> {
-            jdbcTemplate.update("INSERT INTO przepis (id, opis, nazwa) VALUES (?,?,?)",
-                    nowy_przepis.getId(), nowy_przepis.getOpis(), nowy_przepis.getNazwa());
+            jdbcTemplate.update("INSERT INTO przepis (id, opis, nazwa, nazwa_zdjecia, skladniki) VALUES (?,?,?,?,?)",
+                    nowy_przepis.getId(),
+                    nowy_przepis.getOpis(),
+                    nowy_przepis.getNazwa(),
+                    nowy_przepis.getNazwa_zdjecia(),
+                    nowy_przepis.getSkladniki());
         });
-
         return 1;
     }
 

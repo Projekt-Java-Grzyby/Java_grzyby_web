@@ -11,4 +11,8 @@ public class Przepis {
     private int id;
     private String opis;
     private String nazwa;
+    private String nazwa_zdjecia;
+    private String skladniki;
 }
+
+

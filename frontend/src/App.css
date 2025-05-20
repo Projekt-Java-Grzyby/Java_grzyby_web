@@ -69,6 +69,8 @@ body::before {
   width: 100%;
 }
 
+/* grzyby */
+
 .grzyb-list {
   display: flex;
   flex-wrap: wrap;
@@ -119,6 +121,8 @@ body::before {
   text-align: center;
 }
 
+/* Przepisy */
+
 .przepisy-section {
   padding: 40px;
   background-color: transparent;
@@ -129,22 +133,42 @@ body::before {
 .przepisy-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   gap: 2rem;
   padding: 2rem 0;
 }
 
 .przepis-card {
+  display: flex;
+  flex-direction: row;
+  width: 48%;
+  height: 150px;
   background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  padding: 1rem;
-  border-radius: 0;
-  width: 250px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  border-radius: 0;
+  overflow: hidden;
   color: #ffffff;
+  gap: 1rem;
+  align-items: center;
 }
+
+.przepis-image {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.przepis-title {
+  font-size: 1.2rem;
+  font-weight: normal;
+  flex: 1;
+  text-align: center;
+}
+
+/* Stopka */
 
 .footer {
   text-align: center;
@@ -157,9 +181,7 @@ body::before {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* Przycisk ze strony */
 
 .cssbuttons-io {
   position: relative;
@@ -173,7 +195,7 @@ html {
   background: linear-gradient(135deg, #a18742 0%, #3c4d33 40%, #2e3d2f 100%);
   color: ghostwhite;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
 .cssbuttons-io svg {
@@ -216,4 +238,68 @@ html {
 
 .cssbuttons-io:active {
   transform: scale(0.95);
+}
+
+/* Inne formatowanie */
+
+.detail-container {
+  padding: 2rem;
+}
+
+/* Styl nazwy powszechnej */
+.common-name {
+  font-weight: normal;
+  font-style: italic;
+  margin-top: -0.5rem;
+}
+
+/* Grzyb opis + obrazek */
+.detail-content {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+  align-items: flex-start;
+}
+
+/* Opis grzyba */
+.detail-description {
+  flex: 1;
+  margin: 0;
+}
+
+/* Obrazek w sekcji grzyb (mały) */
+.detail-image {
+  max-width: 400px;
+  max-height: 300px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Obrazek w sekcji grzyb (duży) */
+.fullscreen-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 20px black;
+}
+
+/* Tło obrazka duzego w sekcji grzyb */
+.fullscreen-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+  z-index: 9999;
+}
+
+/* Kursor łapki dla obiektów klikalnych */
+.clickable {
+  cursor: pointer;
+}
+
+html {
+  scroll-behavior: smooth;
 }
