@@ -69,7 +69,7 @@ body::before {
   width: 100%;
 }
 
-/* grzyby */
+/* Grzyby */
 
 .grzyb-list {
   display: flex;
@@ -104,11 +104,16 @@ body::before {
   transform: scale(1.1);
 }
 
+.grzyb-name:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: background-color 0.3s ease;
+}
+
 .grzyb-name {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 60px; /* ustalona wysokość, dostosuj według potrzeb */
+  height: 60px;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -152,6 +157,11 @@ body::before {
   color: #ffffff;
   gap: 1rem;
   align-items: center;
+}
+
+.przepis-card:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transition: background-color 0.3s ease;
 }
 
 .przepis-image {

@@ -9,5 +9,4 @@ public class DbgrzybappApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DbgrzybappApplication.class, args);
 	}
-
 }
