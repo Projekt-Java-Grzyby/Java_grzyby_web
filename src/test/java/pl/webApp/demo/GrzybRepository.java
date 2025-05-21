@@ -15,14 +15,25 @@ public class GrzybRepository {
 
     /// obsluga tabeli grzyb
     public List<Grzyb> getData() {
-        return jdbcTemplate.query("SELECT id, nazwa, nazwa_powszechna, id_obrazek, id_kategoria, opis, nazwa_zdjecia  FROM grzyb",
+
+        List<Grzyb> grzyby = jdbcTemplate.query("SELECT * FROM grzyb",
                 BeanPropertyRowMapper.newInstance(Grzyb.class));
+        for (Grzyb g : grzyby) {
+            g.setKategoria(jdbcTemplate.queryForObject("SELECT id, czy_jadalne, niebezpieczenstwo FROM kategoria WHERE kategoria.id = ?",
+                    BeanPropertyRowMapper.newInstance(Kategoria.class),g.getId_kategoria()));
+        }
+
+        return grzyby;
     }
 
     public Grzyb getGrzyb(int id) {
-        return jdbcTemplate.queryForObject("SELECT id, nazwa, nazwa_powszechna, id_obrazek, id_kategoria, opis, nazwa_zdjecia FROM grzyb WHERE id = ?",
+        Grzyb grzyb=jdbcTemplate.queryForObject("SELECT grzyb.id, nazwa, nazwa_powszechna, id_obrazek, opis FROM grzyb WHERE grzyb.id = ?",
                 BeanPropertyRowMapper.newInstance(Grzyb.class), id);
+        grzyb.setKategoria(jdbcTemplate.queryForObject("SELECT kategoria.id, czy_jadalne, niebezpieczenstwo FROM grzyb JOIN kategoria ON grzyb.id_kategoria = kategoria.id WHERE grzyb.id = ?",
+                BeanPropertyRowMapper.newInstance(Kategoria.class),id));
+        return grzyb;
     }
+
 
     public int addGrzyby(List<Grzyb> grzyby) {
         grzyby.forEach(nowy_grzyb -> {

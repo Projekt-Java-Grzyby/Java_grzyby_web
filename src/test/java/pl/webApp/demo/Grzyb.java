@@ -13,6 +13,11 @@ public class Grzyb {
     private String nazwa_powszechna;
     private int id_obrazek;
     private int id_kategoria;
+    private Kategoria kategoria;
     private String opis;
     private String nazwa_zdjecia;
+
+    public void setKategoria(Kategoria kategoria){
+        this.kategoria = kategoria;
+    }
 }
