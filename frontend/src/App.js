@@ -5,6 +5,7 @@ function App() {
     const [grzyby, setGrzyby] = useState([]);
     const [przepisy, setPrzepisy] = useState([]);
     const [selectedPrzepis, setSelectedPrzepis] = useState(null);
+    const [showAllPrzepisy, setShowAllPrzepisy] = useState(false);
     const [selectedGrzyb, setSelectedGrzyb] = useState(null);
     const [fullscreenImage, setFullscreenImage] = useState(null);
     const [showAllGrzyby, setShowAllGrzyby] = useState(false);
@@ -190,7 +191,7 @@ function App() {
             <div id="przepisy" className="przepisy-section" ref={przepisyRef}>
             <h2 className="grzyb-title">Przepisy</h2>
                 <div className="przepisy-list">
-                    {przepisy.map((przepis) => (
+                    {(showAllPrzepisy ? przepisy : przepisy.slice(0, 6)).map((przepis) => (
                         <div
                             key={przepis.id}
                             className="przepis-card"
@@ -209,6 +210,25 @@ function App() {
                     ))}
                 </div>
             </div>
+
+            {przepisy.length > 6 && (
+                <div className="show-more-container">
+                    <button
+                        className="show-more-button"
+                        onClick={() => {
+                            setShowAllPrzepisy(prev => {
+                                const newValue = !prev;
+                                if (!newValue && przepisyRef.current) {
+                                    przepisyRef.current.scrollIntoView({ behavior: 'smooth' });
+                                }
+                                return newValue;
+                            });
+                        }}
+                    >
+                        {showAllPrzepisy ? 'Zwiń' : 'Zobacz więcej'}
+                    </button>
+                </div>
+            )}
 
             <div className="footer">
                 &copy; 2025 Atlas Grzybów. Wszelkie prawa zastrzeżone.
