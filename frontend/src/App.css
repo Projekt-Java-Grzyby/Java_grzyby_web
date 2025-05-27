@@ -390,6 +390,8 @@ body::before {
   flex: 1;
   margin-top: 0;
   margin-right: 50px;
+  font-weight: lighter;
+  font-size: 1.2rem;
 }
 
 /* Obrazek w sekcji grzyb (mały) */

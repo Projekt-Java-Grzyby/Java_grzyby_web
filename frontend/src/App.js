@@ -53,7 +53,7 @@ function App() {
                         <div className="extra-info-box" style={{ marginTop: '1rem' }}>
                             <ul style={{ paddingLeft: '1.2rem' }}>
                                 <li>
-                                    <strong>Czy jadalny:</strong>{' '}
+                                    <strong>Jadalny:</strong>{' '}
                                     {String(selectedGrzyb.kategoria?.czy_jadalne).toLowerCase() === 'true' ? 'Tak' : 'Nie'}
                                 </li>
                                 <li>
