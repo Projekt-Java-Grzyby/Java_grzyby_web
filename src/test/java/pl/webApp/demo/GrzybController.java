@@ -59,6 +59,11 @@ public class GrzybController {
     @GetMapping("/grzyb_przepis")
     public List<Grzyb_przepis> getAllGrzyb_przepis() {return grzybRepository.getData_grzybPrzepis();}
 
+    @GetMapping("/kategorie")
+    public List<Kategoria> getKategorie() {
+        return grzybRepository.getData_kategoria();
+    }
+
     /// obsługa zdjęć grzybów
     @GetMapping("/zdjecia/{filename}")
     public ResponseEntity<Resource> getGrzybImage(@PathVariable String filename) {

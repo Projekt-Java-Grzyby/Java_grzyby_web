@@ -93,19 +93,19 @@ body::before {
   content: "";
   position: absolute;
   top: 50%;
-  width: 400px;       /* długość linii */
-  height: 2px;        /* grubość linii */
+  width: 400px;
+  height: 2px;
   background-color: white;
   opacity: 1.0;
   transform: translateY(-50%);
 }
 
 .grzyb-title::before {
-  left: -200px;       /* przesunięcie linii na lewo od napisu */
+  left: -200px;
 }
 
 .grzyb-title::after {
-  right: -200px;      /* przesunięcie linii na prawo od napisu */
+  right: -200px;
 }
 
 .grzyb-list {
@@ -163,6 +163,28 @@ body::before {
   font-size: 1.2rem;
   text-align: center;
 }
+
+.extra-info-box {
+  margin-top: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  color: white;
+  font-size: 1rem;
+}
+
+.extra-info-box ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.extra-info-box li {
+  margin: 0.8rem 0;
+}
+
 
 /* Przepisy */
 
