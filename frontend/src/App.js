@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './App.css';
 
 function App() {
@@ -7,6 +7,9 @@ function App() {
     const [selectedPrzepis, setSelectedPrzepis] = useState(null);
     const [selectedGrzyb, setSelectedGrzyb] = useState(null);
     const [fullscreenImage, setFullscreenImage] = useState(null);
+    const [showAllGrzyby, setShowAllGrzyby] = useState(false);
+    const grzybyRef = useRef(null);
+    const przepisyRef = useRef(null);
 
     useEffect(() => {
         fetch('http://localhost:8080/grzyby/przepisy')
@@ -72,7 +75,15 @@ function App() {
 
         return (
             <div className="App detail-container">
-                <button className="cssbuttons-io" onClick={() => setSelectedPrzepis(null)}>
+                <button
+                    className="cssbuttons-io"
+                    onClick={() => {
+                        setSelectedPrzepis(null);
+                        setTimeout(() => {
+                            przepisyRef.current?.scrollIntoView({ behavior: 'smooth' });
+                        }, 0);
+                    }}
+                >
                     <span>← Powrót do przepisów</span>
                 </button>
 
@@ -124,28 +135,49 @@ function App() {
                 </div>
             </div>
 
-            <div id="grzyby" className="grzyb-list">
-                {grzyby.map((grzyb) => (
-                    <div
-                        key={grzyb.id}
-                        className="grzyb-card"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => setSelectedGrzyb(grzyb)}
-                    >
-                        {grzyb.nazwa_zdjecia && (
-                            <img
-                                src={`http://localhost:8080/grzyby/zdjecia/${grzyb.nazwa_zdjecia}`}
-                                alt={grzyb.nazwa_powszechna}
-                                className="grzyb-image"
-                            />
-                        )}
-                        <div className="grzyb-name">{grzyb.nazwa_powszechna}</div>
-                    </div>
-                ))}
+            <div id="grzyby" className="grzyb-section">
+                <h2 className="grzyb-title">Grzyby</h2>
+                <div id="grzyby" className="grzyb-list" ref={grzybyRef}>
+                {(showAllGrzyby ? grzyby : grzyby.slice(0, 8)).map((grzyb) => (
+                        <div
+                            key={grzyb.id}
+                            className="grzyb-card"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setSelectedGrzyb(grzyb)}
+                        >
+                            {grzyb.nazwa_zdjecia && (
+                                <img
+                                    src={`http://localhost:8080/grzyby/zdjecia/${grzyb.nazwa_zdjecia}`}
+                                    alt={grzyb.nazwa_powszechna}
+                                    className="grzyb-image"
+                                />
+                            )}
+                            <div className="grzyb-name">{grzyb.nazwa_powszechna}</div>
+                        </div>
+                    ))}
+                </div>
             </div>
+            {grzyby.length > 8 && (
+                <div className="show-more-container">
+                    <button
+                        className="show-more-button"
+                        onClick={() => {
+                            setShowAllGrzyby(prev => {
+                                const newValue = !prev;
+                                if (!newValue && grzybyRef.current) {
+                                    grzybyRef.current.scrollIntoView({ behavior: 'smooth' });
+                                }
+                                return newValue;
+                            });
+                        }}
+                    >
+                        {showAllGrzyby ? 'Zwiń' : 'Zobacz więcej'}
+                    </button>
+                </div>
+            )}
 
-            <div id="przepisy" className="przepisy-section">
-                <h2>Przepisy</h2>
+            <div id="przepisy" className="przepisy-section" ref={przepisyRef}>
+            <h2 className="grzyb-title">Przepisy</h2>
                 <div className="przepisy-list">
                     {przepisy.map((przepis) => (
                         <div
