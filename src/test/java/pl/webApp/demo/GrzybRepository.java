@@ -117,7 +117,7 @@ public class GrzybRepository {
 
     /// obsluga tabeli Przepis
     public List<Przepis> getData_przepis() {
-        return jdbcTemplate.query("SELECT id, opis, nazwa, nazwa_zdjecia, skladniki FROM przepis",
+        return jdbcTemplate.query("SELECT id, opis, nazwa, nazwa_zdjecia, skladniki, poziom_trudnosci FROM przepis",
                 BeanPropertyRowMapper.newInstance(Przepis.class));
     }
 

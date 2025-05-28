@@ -13,4 +13,5 @@ public class Przepis {
     private String nazwa;
     private String nazwa_zdjecia;
     private String skladniki;
+    private int poziom_trudnosci;
 }
