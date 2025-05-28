@@ -16,6 +16,7 @@ public class Grzyb {
     private Kategoria kategoria;
     private String opis;
     private String nazwa_zdjecia;
+    private int powszechnosc;
 
     public void setKategoria(Kategoria kategoria){
         this.kategoria = kategoria;

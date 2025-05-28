@@ -27,7 +27,7 @@ public class GrzybRepository {
     }
 
     public Grzyb getGrzyb(int id) {
-        Grzyb grzyb=jdbcTemplate.queryForObject("SELECT grzyb.id, nazwa, nazwa_powszechna, id_obrazek, opis FROM grzyb WHERE grzyb.id = ?",
+        Grzyb grzyb=jdbcTemplate.queryForObject("SELECT grzyb.id, nazwa, nazwa_powszechna, id_obrazek, opis, powszechnosc FROM grzyb WHERE grzyb.id = ?",
                 BeanPropertyRowMapper.newInstance(Grzyb.class), id);
         grzyb.setKategoria(jdbcTemplate.queryForObject("SELECT kategoria.id, czy_jadalne, niebezpieczenstwo FROM grzyb JOIN kategoria ON grzyb.id_kategoria = kategoria.id WHERE grzyb.id = ?",
                 BeanPropertyRowMapper.newInstance(Kategoria.class),id));
