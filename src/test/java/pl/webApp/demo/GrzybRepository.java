@@ -37,8 +37,15 @@ public class GrzybRepository {
 
     public int addGrzyby(List<Grzyb> grzyby) {
         grzyby.forEach(nowy_grzyb -> {
-            jdbcTemplate.update("INSERT INTO grzyb (nazwa, nazwa_powszechna, id_obrazek,id_kategoria,opis,nazwa_zdjecia) VALUES (?,?,?,?,?)",
-                    nowy_grzyb.getNazwa(),nowy_grzyb.getNazwa_powszechna(), nowy_grzyb.getId_obrazek(), nowy_grzyb.getId_kategoria(), nowy_grzyb.getOpis());
+            jdbcTemplate.update(
+                    "INSERT INTO grzyb (nazwa, nazwa_powszechna, id_obrazek, id_kategoria, opis, nazwa_zdjecia) VALUES (?,?,?,?,?,?)",
+                    nowy_grzyb.getNazwa(),
+                    nowy_grzyb.getNazwa_powszechna(),
+                    nowy_grzyb.getId_obrazek(),
+                    nowy_grzyb.getId_kategoria(),
+                    nowy_grzyb.getOpis(),
+                    nowy_grzyb.getNazwa_zdjecia()
+            );
         });
 
         return 1;

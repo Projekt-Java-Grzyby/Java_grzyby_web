@@ -11,6 +11,14 @@ function App() {
     const [showAllGrzyby, setShowAllGrzyby] = useState(false);
     const grzybyRef = useRef(null);
     const przepisyRef = useRef(null);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [mojeGrzyby, setMojeGrzyby] = useState([]);
+    const [form, setForm] = useState({
+        nazwa: '',
+        nazwa_powszechna: '',
+        opis: '',
+        zdjecie: null
+    });
 
     useEffect(() => {
         fetch('http://localhost:8080/grzyby/przepisy')
@@ -67,6 +75,7 @@ function App() {
                     <div className="right-column" style={{ flex: 1 }}>
                         <p className="detail-description">
                             {selectedGrzyb.opis || 'Brak opisu.'}
+                            {selectedGrzyb.powszechnosc || 'Brak p.'}
                         </p>
                     </div>
 
@@ -135,6 +144,103 @@ function App() {
             </div>
         );
     }
+    if (showAddForm) {
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('nazwa', form.nazwa);
+            formData.append('nazwa_powszechna', form.nazwa_powszechna);
+            formData.append('opis', form.opis);
+            formData.append('zdjecie', form.zdjecie);
+
+            try {
+                const res = await fetch('http://localhost:8080/grzyby/addgrzyb', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (res.ok) {
+                    alert('Grzyb dodany!');
+                    setShowAddForm(false);
+                } else {
+                    alert('Błąd dodawania grzyba');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        return (
+            <div className="App add-form">
+                <button
+                    className="cssbuttons-io"
+                    onClick={() => setShowAddForm(false)}
+                >
+                    <span>← Powrót do grzybów</span>
+                </button>
+
+                <h2>Dodaj nowego grzyba</h2>
+                <form onSubmit={handleSubmit} encType="multipart/form-data">
+                    <input
+                        type="text"
+                        placeholder="Nazwa łacińska"
+                        value={form.nazwa}
+                        onChange={(e) => setForm({ ...form, nazwa: e.target.value })}
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Nazwa powszechna"
+                        value={form.nazwa_powszechna}
+                        onChange={(e) => setForm({ ...form, nazwa_powszechna: e.target.value })}
+                        required
+                    />
+                    <textarea
+                        placeholder="Opis"
+                        value={form.opis}
+                        onChange={(e) => setForm({ ...form, opis: e.target.value })}
+                        required
+                    />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setForm({ ...form, zdjecie: e.target.files[0] })}
+                        required
+                    />
+                    <button type="submit">Dodaj</button>
+                </form>
+            </div>
+        );
+    }
+
+    if (mojeGrzyby.length > 0) {
+        return (
+            <div className="App">
+                <h2>Moje Grzyby</h2>
+                <div className="grzyb-list">
+                    {mojeGrzyby.map(grzyb => (
+                        <div
+                            key={grzyb.id}
+                            className="grzyb-card"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setSelectedGrzyb(grzyb)}
+                        >
+                            {grzyb.nazwa_zdjecia && (
+                                <img
+                                    src={`http://localhost:8080/grzyby/zdjecia/${grzyb.nazwa_zdjecia}`}
+                                    alt={grzyb.nazwa_powszechna}
+                                    className="grzyb-image"
+                                />
+                            )}
+                            <div className="grzyb-name">{grzyb.nazwa_powszechna}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+
 
 
     return (
@@ -144,6 +250,17 @@ function App() {
                 <div className="nav-links">
                     <a href="#grzyby">Spis Grzybów</a>
                     <a href="#przepisy">Przepisy</a>
+                    <a onClick={() => {
+                        setShowAddForm(true);
+                        setSelectedGrzyb(null);
+                        setSelectedPrzepis(null);
+                    }}>Dodaj Grzyba</a>
+                    <a onClick={() => {
+                        setMojeGrzyby(grzyby.filter(g => g.uzytkownik === true)); // zakładamy, że `uzytkownik` to true dla własnych
+                        setShowAddForm(false);
+                        setSelectedGrzyb(null);
+                        setSelectedPrzepis(null);
+                    }}>Moje Grzyby</a>
                 </div>
             </div>
 

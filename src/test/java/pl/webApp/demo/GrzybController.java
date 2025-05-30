@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.net.MalformedURLException;
@@ -41,10 +43,10 @@ public class GrzybController {
     public List<Obrazek> getAllObrazki() {
         return grzybRepository.getData_obrazek();
     }
-    @PostMapping()
-    public int addGrzyb(@RequestBody List<Grzyb> grzyby) {
-        return grzybRepository.addGrzyby(grzyby);
-    }
+//    @PostMapping()
+//    public int addGrzyb(@RequestBody List<Grzyb> grzyby) {
+//        return grzybRepository.addGrzyby(grzyby);
+//    }
 
     @GetMapping("/obrazek/{id}")
     public Obrazek getObrazekById(@PathVariable("id") int id) {
@@ -94,4 +96,34 @@ public class GrzybController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/addgrzyb")
+    public ResponseEntity<?> addGrzybWithImage(
+            @RequestParam("nazwa") String nazwa,
+            @RequestParam("nazwa_powszechna") String nazwaPowszechna,
+            @RequestParam("opis") String opis,
+            @RequestParam("zdjecie") MultipartFile zdjecie
+    ) {
+        try {
+
+            String fileName = zdjecie.getOriginalFilename();
+            Path uploadPath = Paths.get("src/mojezdjecia/");
+            Path filePath = uploadPath.resolve(fileName);
+            zdjecie.transferTo(filePath.toFile());
+
+            Grzyb grzyb = new Grzyb();
+            grzyb.setNazwa(nazwa);
+            grzyb.setNazwa_powszechna(nazwaPowszechna);
+            grzyb.setOpis(opis);
+            grzyb.setNazwa_zdjecia(fileName);
+
+            grzybRepository.addGrzyby(List.of(grzyb));
+
+            return ResponseEntity.ok("Grzyb dodany");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Błąd dodawania grzyba: " + e.getMessage());
+        }
+    }
+
 }
