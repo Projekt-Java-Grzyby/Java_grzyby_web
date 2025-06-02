@@ -294,13 +294,15 @@ function App() {
                         setShowAddForm(true);
                         setSelectedGrzyb(null);
                         setSelectedPrzepis(null);
-                    }}>Dodaj Grzyba</a>
+                    }} style={{ cursor: 'pointer' }}
+                    >Dodaj Grzyba</a>
                     <a onClick={() => {
                         setShowAddForm(false);
                         setSelectedGrzyb(null);
                         setSelectedPrzepis(null);
                         setCurrentPage('mojeGrzyby');
-                    }}>Moje Grzyby</a>
+                    }}style={{ cursor: 'pointer' }}
+                    >Moje Grzyby</a>
                 </div>
             </div>
 
