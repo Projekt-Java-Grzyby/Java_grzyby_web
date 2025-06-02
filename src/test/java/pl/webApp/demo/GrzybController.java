@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.net.MalformedURLException;
@@ -102,12 +103,16 @@ public class GrzybController {
             @RequestParam("nazwa") String nazwa,
             @RequestParam("nazwa_powszechna") String nazwaPowszechna,
             @RequestParam("opis") String opis,
-            @RequestParam("zdjecie") MultipartFile zdjecie
+            @RequestParam("powszechnosc") int powszechnosc,
+            @RequestParam("zdjecie") MultipartFile zdjecie,
+            @RequestParam("czy_oryginalne") boolean czyOryginalne
     ) {
         try {
-
             String fileName = zdjecie.getOriginalFilename();
-            Path uploadPath = Paths.get("src/mojezdjecia/");
+            Path uploadPath = Paths.get(System.getProperty("user.dir"), "mojezdjecia");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
             Path filePath = uploadPath.resolve(fileName);
             zdjecie.transferTo(filePath.toFile());
 
@@ -115,9 +120,10 @@ public class GrzybController {
             grzyb.setNazwa(nazwa);
             grzyb.setNazwa_powszechna(nazwaPowszechna);
             grzyb.setOpis(opis);
-            grzyb.setNazwa_zdjecia(fileName);
+            grzyb.setPowszechnosc(powszechnosc);
+            grzyb.setCzy_oryginalne(czyOryginalne);
 
-            grzybRepository.addGrzyby(List.of(grzyb));
+            grzybRepository.addGrzyb(grzyb);
 
             return ResponseEntity.ok("Grzyb dodany");
         } catch (Exception e) {
@@ -125,5 +131,4 @@ public class GrzybController {
             return ResponseEntity.status(500).body("Błąd dodawania grzyba: " + e.getMessage());
         }
     }
-
 }

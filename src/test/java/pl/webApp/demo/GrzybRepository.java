@@ -3,8 +3,12 @@ package pl.webApp.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -27,29 +31,26 @@ public class GrzybRepository {
     }
 
     public Grzyb getGrzyb(int id) {
-        Grzyb grzyb=jdbcTemplate.queryForObject("SELECT grzyb.id, nazwa, nazwa_powszechna, id_obrazek, opis, powszechnosc FROM grzyb WHERE grzyb.id = ?",
+        Grzyb grzyb=jdbcTemplate.queryForObject("SELECT grzyb.id, nazwa, nazwa_powszechna, opis, powszechnosc, czy_oryginalne FROM grzyb WHERE grzyb.id = ?",
                 BeanPropertyRowMapper.newInstance(Grzyb.class), id);
         grzyb.setKategoria(jdbcTemplate.queryForObject("SELECT kategoria.id, czy_jadalne, niebezpieczenstwo FROM grzyb JOIN kategoria ON grzyb.id_kategoria = kategoria.id WHERE grzyb.id = ?",
                 BeanPropertyRowMapper.newInstance(Kategoria.class),id));
         return grzyb;
     }
 
-
-    public int addGrzyby(List<Grzyb> grzyby) {
-        grzyby.forEach(nowy_grzyb -> {
-            jdbcTemplate.update(
-                    "INSERT INTO grzyb (nazwa, nazwa_powszechna, id_obrazek, id_kategoria, opis, nazwa_zdjecia) VALUES (?,?,?,?,?,?)",
-                    nowy_grzyb.getNazwa(),
-                    nowy_grzyb.getNazwa_powszechna(),
-                    nowy_grzyb.getId_obrazek(),
-                    nowy_grzyb.getId_kategoria(),
-                    nowy_grzyb.getOpis(),
-                    nowy_grzyb.getNazwa_zdjecia()
-            );
-        });
-
-        return 1;
+    public void addGrzyb(Grzyb grzyb) {
+        jdbcTemplate.update(
+                "INSERT INTO grzyb (nazwa, nazwa_powszechna, id_kategoria, opis, powszechnosc, czy_oryginalne) VALUES (?, ?, ?, ?, ?, ?)",
+                grzyb.getNazwa(),
+                grzyb.getNazwa_powszechna(),
+                1,
+                grzyb.getOpis(),
+                grzyb.getPowszechnosc(),
+                grzyb.getCzy_oryginalne() ? 1 : 0
+        );
     }
+
+
     /// obsluga tabeli grzyb przepis
     public List<Grzyb_przepis> getData_grzybPrzepis() {
         return jdbcTemplate.query("SELECT id_grzyb, id_przepis FROM grzyb_przepis",
@@ -101,7 +102,7 @@ public class GrzybRepository {
     }
 
 
-    /// Obsluga tabeli Obrazek
+    /// Obsluga tabeli Obrazek - niedyspozycyjne
     public List<Obrazek> getData_obrazek() {
         return jdbcTemplate.query("SELECT id, url_obrazka, opis FROM obrazek",
                 BeanPropertyRowMapper.newInstance(Obrazek.class));
@@ -146,6 +147,5 @@ public class GrzybRepository {
     }
 
     /// obsluga tabeli kategoria itd itd...
-
 }
 

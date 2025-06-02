@@ -151,6 +151,8 @@ function App() {
             formData.append('nazwa', form.nazwa);
             formData.append('nazwa_powszechna', form.nazwa_powszechna);
             formData.append('opis', form.opis);
+            formData.append('powszechnosc', form.powszechnosc || '1');
+            formData.append('czy_oryginalne', 'false');
             formData.append('zdjecie', form.zdjecie);
 
             try {
@@ -207,6 +209,27 @@ function App() {
                         onChange={(e) => setForm({ ...form, zdjecie: e.target.files[0] })}
                         required
                     />
+
+                    <label>
+                        Powszechność (1-10):
+                        <select
+                            value={form.powszechnosc || '1'}
+                            onChange={(e) => setForm({ ...form, powszechnosc: e.target.value })}
+                            required
+                        >
+                            {[...Array(10)].map((_, i) => (
+                                <option key={i + 1} value={i + 1}>
+                                    {i + 1}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <input
+                        type="hidden"
+                        value="false"
+                        readOnly
+                    />
                     <button type="submit">Dodaj</button>
                 </form>
             </div>
@@ -239,9 +262,6 @@ function App() {
             </div>
         );
     }
-
-
-
 
     return (
         <div className="App">
