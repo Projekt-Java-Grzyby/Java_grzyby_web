@@ -16,6 +16,8 @@ import java.net.MalformedURLException;
 
 
 import java.util.List;
+import java.util.Optional;
+
 /// crossOrigin udostępnia front-endowi, zmienić port jeśli nie pasuje
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -117,9 +119,21 @@ public class GrzybController {
             @RequestParam("opis") String opis,
             @RequestParam("powszechnosc") int powszechnosc,
             @RequestParam("zdjecie") MultipartFile zdjecie,
-            @RequestParam("czy_oryginalne") boolean czyOryginalne
+            @RequestParam("czy_oryginalne") boolean czyOryginalne,
+            @RequestParam("kategoria_id") int kategoriaId
     ) {
         try {
+            List<Kategoria> wszystkieKategorie = grzybRepository.getData_kategoria();
+
+            Kategoria kategoria = wszystkieKategorie.stream()
+                    .filter(k -> k.getId() == kategoriaId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (kategoria == null) {
+                return ResponseEntity.badRequest().body("Niepoprawne ID kategorii");
+            }
+
             String fileName = zdjecie.getOriginalFilename();
             Path uploadPath = Paths.get(System.getProperty("user.dir"), "mojezdjecia");
             if (!Files.exists(uploadPath)) {
@@ -135,6 +149,9 @@ public class GrzybController {
             grzyb.setNazwaZdjecia(fileName);
             grzyb.setPowszechnosc(powszechnosc);
             grzyb.setCzy_oryginalne(czyOryginalne);
+
+            grzyb.setKategoria(kategoria);
+            grzyb.setId_kategoria(kategoria.getId());
 
             grzybRepository.addGrzyb(grzyb);
 

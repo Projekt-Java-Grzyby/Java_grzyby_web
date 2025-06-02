@@ -43,11 +43,12 @@ public class GrzybRepository {
                 "INSERT INTO grzyb (nazwa, nazwa_powszechna, id_kategoria, opis, powszechnosc, czy_oryginalne, nazwa_zdjecia) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 grzyb.getNazwa(),
                 grzyb.getNazwa_powszechna(),
-                1,
+                grzyb.getId_kategoria(),
                 grzyb.getOpis(),
                 grzyb.getPowszechnosc(),
                 grzyb.getCzy_oryginalne() ? 1 : 0,
                 grzyb.getNazwaZdjecia()
+
         );
     }
 

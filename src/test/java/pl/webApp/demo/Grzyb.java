@@ -22,11 +22,10 @@ public class Grzyb {
     public void setKategoria(Kategoria kategoria){
         this.kategoria = kategoria;
     }
-    public String getNazwaZdjecia() {
-        return nazwa_zdjecia;
-    }
 
-    public void setNazwaZdjecia(String nazwaZdjecia) {
-        this.nazwa_zdjecia = nazwaZdjecia;
-    }
+    public Kategoria getKategoria() {return kategoria;}
+
+    public String getNazwaZdjecia() {return nazwa_zdjecia;}
+
+    public void setNazwaZdjecia(String nazwaZdjecia) {this.nazwa_zdjecia = nazwaZdjecia;}
 }

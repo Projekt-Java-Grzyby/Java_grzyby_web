@@ -15,6 +15,8 @@ function App() {
     const [mojeGrzyby, setMojeGrzyby] = useState([]);
     const [sortOrder, setSortOrder] = useState('none');
     const [currentPage, setCurrentPage] = useState('home');
+    const [kategorie, setKategorie] = useState([]);
+
     const [form, setForm] = useState({
         nazwa: '',
         nazwa_powszechna: '',
@@ -23,20 +25,13 @@ function App() {
     });
 
     useEffect(() => {
-        fetch('http://localhost:8080/grzyby/przepisy')
-            .then(res => res.json())
-            .then(data => setPrzepisy(data))
-            .catch(err => console.error('Błąd podczas pobierania przepisów:', err));
-    }, []);
-
-    useEffect(() => {
         fetch('http://localhost:8080/grzyby')
-            .then((res) => res.json())
-            .then((data) => {
+            .then(res => res.json())
+            .then(data => {
                 setGrzyby(data.filter(g => g.czy_oryginalne));
                 setMojeGrzyby(data.filter(g => !g.czy_oryginalne));
             })
-            .catch((err) => console.error('Błąd podczas pobierania grzybów:', err));
+            .catch(err => console.error(err));
     }, []);
 
     useEffect(() => {
@@ -46,16 +41,28 @@ function App() {
             .catch(err => console.error('Błąd podczas pobierania moich grzybów:', err));
     }, []);
 
-    let sortedGrzyby = [...grzyby];
 
+    useEffect(() => {
+        fetch('http://localhost:8080/grzyby/przepisy')
+            .then(res => res.json())
+            .then(data => setPrzepisy(data))
+            .catch(err => console.error('Błąd podczas pobierania przepisów:', err));
+    }, []);
+
+    useEffect(() => {
+        fetch('http://localhost:8080/grzyby/kategorie')
+            .then(res => res.json())
+            .then(data => setKategorie(data))
+            .catch(err => console.error(err));
+    }, []);
+
+    let sortedGrzyby = [...grzyby];
     if (sortOrder === 'asc') {
         sortedGrzyby.sort((a, b) => (a.powszechnosc ?? 0) - (b.powszechnosc ?? 0));
     } else if (sortOrder === 'desc') {
         sortedGrzyby.sort((a, b) => (b.powszechnosc ?? 0) - (a.powszechnosc ?? 0));
     }
-
     const grzybyToDisplay = showAllGrzyby ? sortedGrzyby : sortedGrzyby.slice(0, 8);
-
 
     if (selectedGrzyb) {
         return (
@@ -98,7 +105,6 @@ function App() {
                     <div className="right-column" style={{ flex: 1 }}>
                         <p className="detail-description">
                             {selectedGrzyb.opis || 'Brak opisu.'}
-                            {selectedGrzyb.powszechnosc || 'Brak p.'}
                         </p>
                     </div>
 
@@ -146,12 +152,10 @@ function App() {
             </div>
         );
     }
-
     if (selectedPrzepis) {
         const skladnikiArray = selectedPrzepis.skladniki
             ? selectedPrzepis.skladniki.split(';').map(s => s.trim())
             : [];
-
         return (
             <div className="App detail-container">
                 <button
@@ -177,7 +181,6 @@ function App() {
                             onClick={() => setFullscreenImage(`http://localhost:8080/grzyby/zdjecia/${selectedPrzepis.nazwa_zdjecia}`)}
                         />
                     )}
-
                     <div className="detail-description">
                         <p>{selectedPrzepis.opis || "Brak opisu."}</p>
 
@@ -188,7 +191,6 @@ function App() {
                             ))}
                         </ul>
                     </div>
-
                     {fullscreenImage && (
                         <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
                             <img
@@ -210,6 +212,7 @@ function App() {
             formData.append('nazwa_powszechna', form.nazwa_powszechna);
             formData.append('opis', form.opis);
             formData.append('powszechnosc', form.powszechnosc || '1');
+            formData.append('kategoria_id', form.kategoria_id);
             formData.append('czy_oryginalne', 'false');
             formData.append('zdjecie', form.zdjecie);
 
@@ -283,6 +286,22 @@ function App() {
                             </select>
                         </label>
 
+                        <label>
+                            Wybierz kategorię:
+                            <select
+                                value={form.kategoria_id || ''}
+                                onChange={(e) => setForm({ ...form, kategoria_id: Number(e.target.value) })}
+                                required
+                            >
+                                <option value="">Wybierz</option>
+                                {kategorie.map(kategoria => (
+                                    <option key={kategoria.id} value={kategoria.id}>
+                                        {`Jadalne: ${kategoria.czy_jadalne ? 'Tak' : 'Nie'}, Niebezpieczeństwo: ${kategoria.niebezpieczenstwo}`}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
                         <input
                             type="hidden"
                             value="false"
@@ -333,15 +352,15 @@ function App() {
                 <h2 className="grzyb-title">Grzyby</h2>
                 <div className="sort-buttons">
                     <button className="sort-button" onClick={() => setSortOrder('asc')}>
-                        Sortuj rosnąco
+                        Sortuj rosnąco (powszechność)
                     </button>
                     <div className="sort-divider" />
                     <button className="sort-button" onClick={() => setSortOrder('desc')}>
-                        Sortuj malejąco
+                        Sortuj malejąco (powszechność)
                     </button>
                     <div className="sort-divider" />
                     <button className="sort-button" onClick={() => setSortOrder('none')}>
-                        Usuń sortowanie
+                        Resetuj sortowanie
                     </button>
                 </div>
                 <div id="grzyby-list" className="grzyb-list" ref={grzybyRef}>
