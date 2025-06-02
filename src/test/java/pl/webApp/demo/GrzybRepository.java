@@ -40,16 +40,27 @@ public class GrzybRepository {
 
     public void addGrzyb(Grzyb grzyb) {
         jdbcTemplate.update(
-                "INSERT INTO grzyb (nazwa, nazwa_powszechna, id_kategoria, opis, powszechnosc, czy_oryginalne) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO grzyb (nazwa, nazwa_powszechna, id_kategoria, opis, powszechnosc, czy_oryginalne, nazwa_zdjecia) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 grzyb.getNazwa(),
                 grzyb.getNazwa_powszechna(),
                 1,
                 grzyb.getOpis(),
                 grzyb.getPowszechnosc(),
-                grzyb.getCzy_oryginalne() ? 1 : 0
+                grzyb.getCzy_oryginalne() ? 1 : 0,
+                grzyb.getNazwaZdjecia()
         );
     }
 
+    public List<Grzyb> getMojeGrzyby() {
+        List<Grzyb> grzyby = jdbcTemplate.query("SELECT * FROM grzyb WHERE czy_oryginalne = TRUE",
+                BeanPropertyRowMapper.newInstance(Grzyb.class));
+        for (Grzyb g : grzyby) {
+            g.setKategoria(jdbcTemplate.queryForObject(
+                    "SELECT id, czy_jadalne, niebezpieczenstwo FROM kategoria WHERE id = ?",
+                    BeanPropertyRowMapper.newInstance(Kategoria.class), g.getId_kategoria()));
+        }
+        return grzyby;
+    }
 
     /// obsluga tabeli grzyb przepis
     public List<Grzyb_przepis> getData_grzybPrzepis() {

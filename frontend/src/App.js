@@ -13,6 +13,7 @@ function App() {
     const przepisyRef = useRef(null);
     const [showAddForm, setShowAddForm] = useState(false);
     const [mojeGrzyby, setMojeGrzyby] = useState([]);
+    const [currentPage, setCurrentPage] = useState('home');
     const [form, setForm] = useState({
         nazwa: '',
         nazwa_powszechna: '',
@@ -30,8 +31,18 @@ function App() {
     useEffect(() => {
         fetch('http://localhost:8080/grzyby')
             .then((res) => res.json())
-            .then((data) => setGrzyby(data))
+            .then((data) => {
+                setGrzyby(data.filter(g => g.czy_oryginalne));
+                setMojeGrzyby(data.filter(g => !g.czy_oryginalne));
+            })
             .catch((err) => console.error('Błąd podczas pobierania grzybów:', err));
+    }, []);
+
+    useEffect(() => {
+        fetch('http://localhost:8080/grzyby/mojegrzyby')
+            .then(res => res.json())
+            .then(data => setMojeGrzyby(data))
+            .catch(err => console.error('Błąd podczas pobierania moich grzybów:', err));
     }, []);
 
     if (selectedGrzyb) {
@@ -84,6 +95,36 @@ function App() {
                             <img src={fullscreenImage} alt="fullscreen" className="fullscreen-image" />
                         </div>
                     )}
+                </div>
+            </div>
+        );
+    }
+
+    if (currentPage === 'mojeGrzyby') {
+        return (
+            <div className="App detail-container">
+                <button className="cssbuttons-io" onClick={() => setCurrentPage('home')}>
+                    <span>← Powrót do strony głównej</span>
+                </button>
+                <h2>Moje Grzyby</h2>
+                <div className="grzyb-list">
+                    {mojeGrzyby.length > 0 ? mojeGrzyby.map(grzyb => (
+                        <div
+                            key={grzyb.id}
+                            className="grzyb-card"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setSelectedGrzyb(grzyb)}
+                        >
+                            {grzyb.nazwa_zdjecia && (
+                                <img
+                                    src={`http://localhost:8080/grzyby/mojezdjecia/${grzyb.nazwa_zdjecia}`}
+                                    alt={grzyb.nazwa_powszechna}
+                                    className="grzyb-image"
+                                />
+                            )}
+                            <div className="grzyb-name">{grzyb.nazwa_powszechna}</div>
+                        </div>
+                    )) : <p>Brak dodanych grzybów.</p>}
                 </div>
             </div>
         );
@@ -236,33 +277,6 @@ function App() {
         );
     }
 
-    if (mojeGrzyby.length > 0) {
-        return (
-            <div className="App">
-                <h2>Moje Grzyby</h2>
-                <div className="grzyb-list">
-                    {mojeGrzyby.map(grzyb => (
-                        <div
-                            key={grzyb.id}
-                            className="grzyb-card"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => setSelectedGrzyb(grzyb)}
-                        >
-                            {grzyb.nazwa_zdjecia && (
-                                <img
-                                    src={`http://localhost:8080/grzyby/zdjecia/${grzyb.nazwa_zdjecia}`}
-                                    alt={grzyb.nazwa_powszechna}
-                                    className="grzyb-image"
-                                />
-                            )}
-                            <div className="grzyb-name">{grzyb.nazwa_powszechna}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="App">
             <div className="navbar">
@@ -276,10 +290,10 @@ function App() {
                         setSelectedPrzepis(null);
                     }}>Dodaj Grzyba</a>
                     <a onClick={() => {
-                        setMojeGrzyby(grzyby.filter(g => g.uzytkownik === true)); // zakładamy, że `uzytkownik` to true dla własnych
                         setShowAddForm(false);
                         setSelectedGrzyb(null);
                         setSelectedPrzepis(null);
+                        setCurrentPage('mojeGrzyby');
                     }}>Moje Grzyby</a>
                 </div>
             </div>

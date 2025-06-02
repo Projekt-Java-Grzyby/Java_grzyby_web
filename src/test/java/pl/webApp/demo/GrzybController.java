@@ -34,6 +34,12 @@ public class GrzybController {
         return grzybRepository.getData();
     }
 
+    @GetMapping("/mojegrzyby")
+    @ResponseBody
+    public List<Grzyb> getMojeGrzyby() {
+        return grzybRepository.getMojeGrzyby();
+    }
+
     /// http://localhost:8080/grzyby/1
     @GetMapping("/{id}")
     public Grzyb getGrzybById(@PathVariable("id") int id) {
@@ -79,6 +85,12 @@ public class GrzybController {
         return getImageFromFolder(filename, "src/zdjecia/");
     }
 
+    /// obsługa zdjęć dodanych grzybów przez użytkownika
+    @GetMapping("/mojezdjecia/{filename}")
+    public ResponseEntity<Resource> getMojeZdjecie(@PathVariable String filename) {
+        return getImageFromFolder(filename, System.getProperty("user.dir") + "/mojezdjecia/");
+    }
+
     /// wspólna metoda pomocnicza
     private ResponseEntity<Resource> getImageFromFolder(String filename, String folderPath) {
         try {
@@ -120,6 +132,7 @@ public class GrzybController {
             grzyb.setNazwa(nazwa);
             grzyb.setNazwa_powszechna(nazwaPowszechna);
             grzyb.setOpis(opis);
+            grzyb.setNazwaZdjecia(fileName);
             grzyb.setPowszechnosc(powszechnosc);
             grzyb.setCzy_oryginalne(czyOryginalne);
 
