@@ -59,11 +59,11 @@ function App() {
                     <div className="left-column" style={{ flex: '0 0 400px' }}>
                         {selectedGrzyb.nazwa_zdjecia && (
                             <img
-                                src={`http://localhost:8080/grzyby/zdjecia/${selectedGrzyb.nazwa_zdjecia}`}
+                                src={`http://localhost:8080/grzyby/${selectedGrzyb.czy_oryginalne ? 'zdjecia' : 'mojezdjecia'}/${selectedGrzyb.nazwa_zdjecia}`}
                                 alt={selectedGrzyb.nazwa_powszechna}
                                 className="detail-image clickable"
                                 onClick={() =>
-                                    setFullscreenImage(`http://localhost:8080/grzyby/zdjecia/${selectedGrzyb.nazwa_zdjecia}`)
+                                    setFullscreenImage(`http://localhost:8080/grzyby/${selectedGrzyb.czy_oryginalne ? 'zdjecia' : 'mojezdjecia'}/${selectedGrzyb.nazwa_zdjecia}`)
                                 }
                                 style={{ width: '100%', borderRadius: '10px' }}
                             />
@@ -123,6 +123,11 @@ function App() {
                                 />
                             )}
                             <div className="grzyb-name">{grzyb.nazwa_powszechna}</div>
+                            {fullscreenImage && (
+                                <div className="fullscreen-overlay" onClick={() => setFullscreenImage(null)}>
+                                    <img src={fullscreenImage} alt="fullscreen" className="fullscreen-image" />
+                                </div>
+                            )}
                         </div>
                     )) : <p>Brak dodanych grzybów.</p>}
                 </div>
@@ -214,65 +219,66 @@ function App() {
         };
 
         return (
-            <div className="App add-form">
+            <div className="App detail-container">
                 <button
                     className="cssbuttons-io"
                     onClick={() => setShowAddForm(false)}
                 >
                     <span>← Powrót do grzybów</span>
                 </button>
-
-                <h2>Dodaj nowego grzyba</h2>
-                <form onSubmit={handleSubmit} encType="multipart/form-data">
-                    <input
-                        type="text"
-                        placeholder="Nazwa łacińska"
-                        value={form.nazwa}
-                        onChange={(e) => setForm({ ...form, nazwa: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Nazwa powszechna"
-                        value={form.nazwa_powszechna}
-                        onChange={(e) => setForm({ ...form, nazwa_powszechna: e.target.value })}
-                        required
-                    />
-                    <textarea
-                        placeholder="Opis"
-                        value={form.opis}
-                        onChange={(e) => setForm({ ...form, opis: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setForm({ ...form, zdjecie: e.target.files[0] })}
-                        required
-                    />
-
-                    <label>
-                        Powszechność (1-10):
-                        <select
-                            value={form.powszechnosc || '1'}
-                            onChange={(e) => setForm({ ...form, powszechnosc: e.target.value })}
+                <div className="App add-form">
+                    <h2>Dodaj nowego grzyba</h2>
+                    <form onSubmit={handleSubmit} encType="multipart/form-data">
+                        <input
+                            type="text"
+                            placeholder="Nazwa łacińska"
+                            value={form.nazwa}
+                            onChange={(e) => setForm({ ...form, nazwa: e.target.value })}
                             required
-                        >
-                            {[...Array(10)].map((_, i) => (
-                                <option key={i + 1} value={i + 1}>
-                                    {i + 1}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
+                        />
+                        <input
+                            type="text"
+                            placeholder="Nazwa powszechna"
+                            value={form.nazwa_powszechna}
+                            onChange={(e) => setForm({ ...form, nazwa_powszechna: e.target.value })}
+                            required
+                        />
+                        <textarea
+                            placeholder="Opis"
+                            value={form.opis}
+                            onChange={(e) => setForm({ ...form, opis: e.target.value })}
+                            required
+                        />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => setForm({ ...form, zdjecie: e.target.files[0] })}
+                            required
+                        />
 
-                    <input
-                        type="hidden"
-                        value="false"
-                        readOnly
-                    />
-                    <button type="submit">Dodaj</button>
-                </form>
+                        <label>
+                            Powszechność (1-10):
+                            <select
+                                value={form.powszechnosc || '1'}
+                                onChange={(e) => setForm({ ...form, powszechnosc: e.target.value })}
+                                required
+                            >
+                                {[...Array(10)].map((_, i) => (
+                                    <option key={i + 1} value={i + 1}>
+                                        {i + 1}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+
+                        <input
+                            type="hidden"
+                            value="false"
+                            readOnly
+                        />
+                        <button type="submit">Dodaj</button>
+                    </form>
+                </div>
             </div>
         );
     }

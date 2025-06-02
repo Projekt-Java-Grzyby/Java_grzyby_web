@@ -430,3 +430,70 @@ body::before {
 html {
   scroll-behavior: smooth;
 }
+
+.add-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  background-color: #1c1c1e;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-family: 'Lato', sans-serif;
+}
+
+.add-form h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: #fafafa;
+}
+
+.add-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.add-form input[type="text"],
+.add-form textarea,
+.add-form select {
+  background-color: #2c2c2e;
+  border: 1px solid #3a3a3c;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #f2f2f7;
+  font-size: 1rem;
+}
+
+.add-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.add-form input[type="file"] {
+  color: #f2f2f7;
+  background-color: transparent;
+  border: none;
+}
+
+.add-form label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #b0b0b0;
+}
+
+.add-form button[type="submit"] {
+  background-color: #007aff;
+  color: white;
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-form button[type="submit"]:hover {
+  background-color: #0051c8;
+}
