@@ -13,6 +13,7 @@ function App() {
     const przepisyRef = useRef(null);
     const [showAddForm, setShowAddForm] = useState(false);
     const [mojeGrzyby, setMojeGrzyby] = useState([]);
+    const [sortOrder, setSortOrder] = useState('none');
     const [currentPage, setCurrentPage] = useState('home');
     const [form, setForm] = useState({
         nazwa: '',
@@ -44,6 +45,17 @@ function App() {
             .then(data => setMojeGrzyby(data))
             .catch(err => console.error('Błąd podczas pobierania moich grzybów:', err));
     }, []);
+
+    let sortedGrzyby = [...grzyby];
+
+    if (sortOrder === 'asc') {
+        sortedGrzyby.sort((a, b) => (a.powszechnosc ?? 0) - (b.powszechnosc ?? 0));
+    } else if (sortOrder === 'desc') {
+        sortedGrzyby.sort((a, b) => (b.powszechnosc ?? 0) - (a.powszechnosc ?? 0));
+    }
+
+    const grzybyToDisplay = showAllGrzyby ? sortedGrzyby : sortedGrzyby.slice(0, 8);
+
 
     if (selectedGrzyb) {
         return (
@@ -306,10 +318,34 @@ function App() {
                 </div>
             </div>
 
+            <div className="slide-in-container">
+                <div className="slide-left">
+                    Witaj w atlasie grzybów!
+                    <p className="slide-subtext">Znajdziesz tu przeróżne informacje o setkach gatunków grzybów, od tych popularnych, aż po te rzadsze i bardziej egzotyczne. Każdy opis zawiera szczegółowe informacje o ich cechach charakterystycznych, które pomogą Ci bezpiecznie rozpoznać dany gatunek. Dodatkowo poznasz właściwości kulinarne i ewentualne potrawy, które możesz przygotować z grzybów, we własnym mieszkaniu. Ten atlas to doskonałe źródło wiadomości dla każdego miłośnika przyrody — zarówno dla początkujących grzybiarzy, jak i doświadczonych znawców.</p>
+                </div>
+                <div className="slide-right">
+                    Poznaj fascynujący świat grzybów
+                    <p className="slide-subtext">Grzyby to niezwykłe organizmy, które łączą w sobie zarówno cenione przysmaki, jak i groźne trucizny. Zadziwiają swoją budową, unikalnym sposobem odżywiania oraz różnorodnością form i barw. Ich znaczenie w przyrodzie jest nie do przecenienia – odgrywają istotną rolę w funkcjonowaniu całych ekosystemów.</p>
+                </div>
+            </div>
+
             <div id="grzyby" className="grzyb-section">
                 <h2 className="grzyb-title">Grzyby</h2>
+                <div className="sort-buttons">
+                    <button className="sort-button" onClick={() => setSortOrder('asc')}>
+                        Sortuj rosnąco
+                    </button>
+                    <div className="sort-divider" />
+                    <button className="sort-button" onClick={() => setSortOrder('desc')}>
+                        Sortuj malejąco
+                    </button>
+                    <div className="sort-divider" />
+                    <button className="sort-button" onClick={() => setSortOrder('none')}>
+                        Usuń sortowanie
+                    </button>
+                </div>
                 <div id="grzyby-list" className="grzyb-list" ref={grzybyRef}>
-                {(showAllGrzyby ? grzyby : grzyby.slice(0, 8)).map((grzyb) => (
+                    {grzybyToDisplay.map((grzyb) => (
                         <div
                             key={grzyb.id}
                             className="grzyb-card"
