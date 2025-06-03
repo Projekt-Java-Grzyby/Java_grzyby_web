@@ -199,8 +199,8 @@ body::before {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 2rem;
-  padding: 2rem 0;
+  gap: 3rem;
+  padding: 3rem;
 }
 
 .przepis-card {
@@ -394,6 +394,14 @@ body::before {
   font-size: 1.2rem;
 }
 
+.detail-przepis-description {
+  flex: 1;
+  margin-top: -20px;
+  margin-right: 50px;
+  font-weight: lighter;
+  font-size: 1.2rem;
+}
+
 /* Obrazek w sekcji grzyb (mały) */
 .detail-image {
   max-width: 400px;
@@ -506,6 +514,7 @@ html {
 
 .add-form button[type="submit"]:hover {
   background-color: #2e3d2f;
+  box-shadow: 0 4px 12px rgb(0, 0, 0);
 }
 
 /* Przyciski sortowania */
@@ -638,4 +647,14 @@ html {
 .overlapping-mushroom.show {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* grzyb lewo */
+.overlapping-mushroom.left-top {
+  right: auto;
+  left: 10px;
+  width: 300px;
+  top: -20px;
+  transform: translateX(-50px);
+  animation: slideInFromLeft 1.5s ease-out forwards;
 }

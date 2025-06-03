@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /// crossOrigin udostępnia front-endowi, zmienić port jeśli nie pasuje
@@ -64,7 +65,20 @@ public class GrzybController {
 
     @GetMapping("/przepisy")
     public List<Przepis> getAllPrzepisy() {
-        return grzybRepository.getData_przepis();
+        List<Przepis> przepisy = grzybRepository.getData_przepis();
+
+        Map<Integer, String> poziomyTrudnosci = Map.of(
+                1, "łatwe",
+                2, "średnie",
+                3, "trudne",
+                4, "bardzo trudne"
+        );
+
+        for (Przepis p : przepisy) {
+            p.setPoziomTrudnosciTekst(poziomyTrudnosci.getOrDefault(p.getPoziom_trudnosci(), "brak danych"));
+        }
+
+        return przepisy;
     }
     /// http://localhost:8080/grzyby/grzyb_przepis
     @GetMapping("/grzyb_przepis")

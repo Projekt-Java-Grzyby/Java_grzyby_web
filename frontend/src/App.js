@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import grzybImage from './Grzyb.png';
+import grzybImage2 from './Grzyb2.png';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     const [showAddForm, setShowAddForm] = useState(false);
     const [mojeGrzyby, setMojeGrzyby] = useState([]);
     const [sortOrder, setSortOrder] = useState('none');
+    const [sortOrderPrzepisy, setSortOrderPrzepisy] = useState('none');
     const [currentPage, setCurrentPage] = useState('home');
     const [kategorie, setKategorie] = useState([]);
 
@@ -24,6 +26,17 @@ function App() {
         opis: '',
         zdjecie: null
     });
+
+    const poziomyTrudnosci = {
+        1: "Poziom trudności: łatwy",
+        2: "Poziom trudności: średni",
+        3: "Poziom trudności: trudny",
+        4: "Poziom trudności: bardzo trudny"
+    };
+
+    function getPoziomTrudnosciText(poziom) {
+        return poziomyTrudnosci[poziom] || "brak danych";
+    }
 
     useEffect(() => {
         fetch('http://localhost:8080/grzyby')
@@ -58,6 +71,14 @@ function App() {
         sortedGrzyby.sort((a, b) => (b.powszechnosc ?? 0) - (a.powszechnosc ?? 0));
     }
     const grzybyToDisplay = showAllGrzyby ? sortedGrzyby : sortedGrzyby.slice(0, 8);
+
+    let sortedPrzepisy = [...przepisy];
+    if (sortOrderPrzepisy === 'asc') {
+        sortedPrzepisy.sort((a, b) => (a.poziom_trudnosci ?? 0) - (b.poziom_trudnosci ?? 0));
+    } else if (sortOrderPrzepisy === 'desc') {
+        sortedPrzepisy.sort((a, b) => (b.poziom_trudnosci ?? 0) - (a.poziom_trudnosci ?? 0));
+    }
+    const przepisyToDisplay = showAllPrzepisy ? sortedPrzepisy : sortedPrzepisy.slice(0, 4);
 
     if (selectedGrzyb) {
         return (
@@ -166,7 +187,7 @@ function App() {
                 </button>
 
                 <h2>{selectedPrzepis.nazwa}</h2>
-
+                <h3 className="common-name">({getPoziomTrudnosciText(selectedPrzepis.poziom_trudnosci)})</h3>
                 <div className="detail-content">
                     {selectedPrzepis.nazwa_zdjecia && (
                         <img
@@ -176,7 +197,7 @@ function App() {
                             onClick={() => setFullscreenImage(`http://localhost:8080/grzyby/zdjecia/${selectedPrzepis.nazwa_zdjecia}`)}
                         />
                     )}
-                    <div className="detail-description">
+                    <div className="detail-przepis-description">
                         <p>{selectedPrzepis.opis || "Brak opisu."}</p>
 
                         <h3>Składniki:</h3>
@@ -344,6 +365,9 @@ function App() {
                 <div className="mushroom-image-wrapper">
                     <img src={grzybImage} alt="Grzyb" className="overlapping-mushroom show" />
                 </div>
+                <div className="mushroom-image-wrapper">
+                    <img src={grzybImage2} alt="Grzyb2" className="overlapping-mushroom show left-top" />
+                </div>
             </div>
 
             <div id="grzyby" className="grzyb-section">
@@ -402,8 +426,21 @@ function App() {
 
             <div id="przepisy" className="przepisy-section" ref={przepisyRef}>
             <h2 className="grzyb-title">Przepisy</h2>
+                <div className="sort-buttons">
+                    <button className="sort-button" onClick={() => setSortOrderPrzepisy('asc')}>
+                        Sortuj rosnąco (trudność)
+                    </button>
+                    <div className="sort-divider" />
+                    <button className="sort-button" onClick={() => setSortOrderPrzepisy('desc')}>
+                        Sortuj malejąco (trudność)
+                    </button>
+                    <div className="sort-divider" />
+                    <button className="sort-button" onClick={() => setSortOrderPrzepisy('none')}>
+                        Resetuj sortowanie
+                    </button>
+                </div>
                 <div className="przepisy-list">
-                    {(showAllPrzepisy ? przepisy : przepisy.slice(0, 6)).map((przepis) => (
+                    {przepisyToDisplay.map((przepis) => (
                         <div
                             key={przepis.id}
                             className="przepis-card"

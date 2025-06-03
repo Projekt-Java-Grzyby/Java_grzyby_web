@@ -14,4 +14,10 @@ public class Przepis {
     private String nazwa_zdjecia;
     private String skladniki;
     private int poziom_trudnosci;
+    private String poziomTrudnosciTekst;
+
+    public void setPoziomTrudnosciTekst(String tekst) {this.poziomTrudnosciTekst = tekst;}
+
+    public String getPoziomTrudnosciTekst() {return poziomTrudnosciTekst;}
+
 }
