@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import grzybImage from './Grzyb.png';
 import './App.css';
 
 function App() {
@@ -28,19 +29,13 @@ function App() {
         fetch('http://localhost:8080/grzyby')
             .then(res => res.json())
             .then(data => {
-                setGrzyby(data.filter(g => g.czy_oryginalne));
-                setMojeGrzyby(data.filter(g => !g.czy_oryginalne));
+                const oryginalne = data.filter(g => g.czy_oryginalne);
+                const moje = data.filter(g => !g.czy_oryginalne);
+                setGrzyby(oryginalne);
+                setMojeGrzyby(moje);
             })
-            .catch(err => console.error(err));
+            .catch(err => console.error('Błąd podczas pobierania grzybów:', err));
     }, []);
-
-    useEffect(() => {
-        fetch('http://localhost:8080/grzyby/mojegrzyby')
-            .then(res => res.json())
-            .then(data => setMojeGrzyby(data))
-            .catch(err => console.error('Błąd podczas pobierania moich grzybów:', err));
-    }, []);
-
 
     useEffect(() => {
         fetch('http://localhost:8080/grzyby/przepisy')
@@ -345,6 +340,9 @@ function App() {
                 <div className="slide-right">
                     Poznaj fascynujący świat grzybów
                     <p className="slide-subtext">Grzyby to niezwykłe organizmy, które łączą w sobie zarówno cenione przysmaki, jak i groźne trucizny. Zadziwiają swoją budową, unikalnym sposobem odżywiania oraz różnorodnością form i barw. Ich znaczenie w przyrodzie jest nie do przecenienia – odgrywają istotną rolę w funkcjonowaniu całych ekosystemów.</p>
+                </div>
+                <div className="mushroom-image-wrapper">
+                    <img src={grzybImage} alt="Grzyb" className="overlapping-mushroom show" />
                 </div>
             </div>
 
